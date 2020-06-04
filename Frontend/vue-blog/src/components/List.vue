@@ -20,6 +20,7 @@ export default {
     computed: mapGetters(['allPosts']),
     methods: mapActions(['getPosts']),
     async mounted() {
+    
     this.getPosts();
   }
 }

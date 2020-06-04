@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Post from '../views/Post.vue'
-
+import Grafik from '../views/Grafik.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -15,7 +15,12 @@ Vue.use(VueRouter)
     path: '/post/:id',
     name: 'Post',
     component: Post    
-  }
+  },
+  {
+    path: '/graf/',
+    name: 'Graf',
+    component: Grafik
+  },
 ]
 
 const router = new VueRouter({
