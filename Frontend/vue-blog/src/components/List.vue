@@ -19,8 +19,7 @@ import { mapGetters, mapActions } from 'vuex';
 export default {    
     computed: mapGetters(['allPosts']),
     methods: mapActions(['getPosts']),
-    async mounted() {
-    
+    async mounted() {    
     this.getPosts();
   }
 }
