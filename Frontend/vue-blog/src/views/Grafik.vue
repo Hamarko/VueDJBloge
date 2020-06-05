@@ -1,95 +1,105 @@
 <template>
-  <section class="charts">
-        <h3>Dynamic Chart</h3>
-        <vue-highcharts :options="options" ></vue-highcharts>
-    </section>
+  <highcharts class="stock" :constructor-type="'stockChart'" :options="stockOptions"></highcharts>
 </template>
+
 <script>
-import VueHighcharts from "vue2-highcharts";
-import Highcharts from "highcharts";
+import Axios from 'axios'
+ export default {
+    name: "Demo",
+    data() {
+      return {
+        stockOptions: {
+           rangeSelector: {
+            selected: 4
+        },
+        yAxis: {
+            labels: {
+                formatter: function () {
+                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                }
+            },
+            plotLines: [{
+                value: 0,
+                width: 2,
+                color: 'silver'
+            }]
+        },
+         plotOptions: {
+            series: {
+                compare: 'percent',
+                showInNavigator: true
+            }
+        },
 
-const data = {
-  chart: {
-    type: "spline",
-    animation: Highcharts.svg, // don't animate in old IE
-    marginRight: 10,
-    events: {
-      load: function() {
-        // set up the updating of the chart each second
-        var series = this.series[0];
-        setInterval(function() {
-          var x = new Date().getTime(), // current time
-            y = Math.random();
-          series.addPoint([x, y], true, true);
-        }, 1000);
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            valueDecimals: 2,
+            split: true
+        },
+
+        series:  [{
+            data: [],
+            name:"msft"
+
+          }]
+        },
+        rangeSelector: {
+            selected: 4
+        },
+        yAxis: {
+            labels: {
+                formatter: function () {
+                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                }
+            },
+            plotLines: [{
+                value: 0,
+                width: 2,
+                color: 'silver'
+            }]
+        },
+         plotOptions: {
+            series: {
+                compare: 'percent',
+                showInNavigator: true
+            }
+        },
+
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            valueDecimals: 2,
+            split: true
+        },
+
+        series:  [{
+            data: [],
+            name:"msft"
+
+          }]
       }
-    }
-  },
-  title: {
-    text: "Live random data"
-  },
-  xAxis: {
-    type: "datetime",
-    tickPixelInterval: 150
-  },
-  yAxis: {
-    title: {
-      text: "Value"
     },
-    plotLines: [
-      {
-        value: 0,
-        width: 1,
-        color: "#808080"
+    created() {
+      this.fetchData()
+      this.polling = setInterval(this.fetchData, 10000)
+    },
+    beforeDestroy() {
+      clearInterval(this.polling)
+    },
+    methods: {
+      fetchData() {
+        let _this = this;
+        Axios.get('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/msft-c.json').then((r) => {
+          _this.chartOptions.series[0].data = r.data
+        })
       }
-    ]
-  },
-  tooltip: {
-    formatter: function() {
-      return (
-        "<b>" +
-        this.series.name +
-        "</b><br/>" +
-        Highcharts.dateFormat("%Y-%m-%d %H:%M:%S", this.x) +
-        "<br/>" +
-        Highcharts.numberFormat(this.y, 2)
-      );
-    }
-  },
-  legend: {
-    enabled: false
-  },
-  exporting: {
-    enabled: false
-  },
-  series: [
-    {
-      name: "Random data",
-      data: (function() {
-        // generate an array of random data
-        var data = [],
-          time = new Date().getTime(),
-          i;
+  
+    
+  
 
-        for (i = -19; i <= 0; i += 1) {
-          data.push({
-            x: time + i * 1000,
-            y: Math.random()
-          });
-        }
-        return data;
-      })()
-    }
-  ]
-};
-export default {
-  components: {
-    VueHighcharts
-  },
-  data() {
-    return {
-      options: data
-    };
-  }
-};
 </script>
+<style scoped>
+.stock {
+  width: 70%;
+  margin: 0 auto
+}
+</style>
