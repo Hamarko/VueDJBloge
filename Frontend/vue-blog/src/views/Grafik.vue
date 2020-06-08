@@ -4,15 +4,13 @@
 
 <script>
 import Axios from 'axios'
- export default {
+import stockInit from 'highcharts/modules/stock'
+export default {
     name: "Demo",
     data() {
       return {
         stockOptions: {
-           rangeSelector: {
-            selected: 4
-        },
-        yAxis: {
+          yAxis: {
             labels: {
                 formatter: function () {
                     return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -24,7 +22,8 @@ import Axios from 'axios'
                 color: 'silver'
             }]
         },
-         plotOptions: {
+
+        plotOptions: {
             series: {
                 compare: 'percent',
                 showInNavigator: true
@@ -36,46 +35,13 @@ import Axios from 'axios'
             valueDecimals: 2,
             split: true
         },
-
-        series:  [{
+          series: [{
             data: [],
-            name:"msft"
+            name: 'Apl'
 
           }]
         },
-        rangeSelector: {
-            selected: 4
-        },
-        yAxis: {
-            labels: {
-                formatter: function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                }
-            },
-            plotLines: [{
-                value: 0,
-                width: 2,
-                color: 'silver'
-            }]
-        },
-         plotOptions: {
-            series: {
-                compare: 'percent',
-                showInNavigator: true
-            }
-        },
-
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-            valueDecimals: 2,
-            split: true
-        },
-
-        series:  [{
-            data: [],
-            name:"msft"
-
-          }]
+        polling: null
       }
     },
     created() {
@@ -87,15 +53,14 @@ import Axios from 'axios'
     },
     methods: {
       fetchData() {
-        let _this = this;
-        Axios.get('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/msft-c.json').then((r) => {
-          _this.chartOptions.series[0].data = r.data
+        let _this = this
+
+        Axios.get("https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/aapl-c.json").then((r) => {
+          _this.stockOptions.series[0].data = r.data
         })
       }
-  
-    
-  
-
+    }
+  }
 </script>
 <style scoped>
 .stock {
