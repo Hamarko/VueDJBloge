@@ -76,9 +76,7 @@ export default {
                  style: {
                 color: '#E0E0E3'
                  },
-                formatter: function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                },
+                value: 'kWt',
             lineColor: '#707073',
             minorGridLineColor: '#505053',
             tickColor: '#707073',
@@ -104,9 +102,7 @@ export default {
         },
 
         plotOptions: {
-            series: {
-                compare: 'percent',
-                showInNavigator: true,
+            series: {                
                 dataLabels: {
                 color: '#F0F0F3',
                 style: {
@@ -171,13 +167,13 @@ export default {
         }
     },
         tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> kWt<br/>',
             valueDecimals: 2,
             split: true
         },
           series: [{
             data: [],
-            name: 'Apple'
+            name:''
 
           }]
         },
@@ -252,8 +248,16 @@ export default {
     methods: {
       fetchData() {      
         let _this = this
-        Axios.get('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/aapl-c.json').then((r) => {
-          _this.stockOptions.series[0].data = r.data
+        Axios.get('http://127.0.0.1:8000/api/v1/graf/').then((r) => {
+            let activPower = [];
+            let reactivPowe = [];            
+            for (let i = 0; i < r.data.length; i++) {  
+                console.log(r.data[i])            
+                activPower.push([Date.parse(r.data[i].time),+r.data[i].activPower]);
+                reactivPowe.push([Date.parse(r.data[i].time),+r.data[i].reactivPower]);
+                
+            }
+            _this.stockOptions.series = [{name:'Activ Power',data :activPower},{name:'Reactiv Power',data :reactivPowe}]            
         })
       }
     }

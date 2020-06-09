@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from blog.models import AnonimPost
+from blog.models import AnonimPost, GrafPower
 from rest_framework import generics
-from blog.serializers import PostSerializer
+from blog.serializers import PostSerializer,GrafPowerSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -20,3 +20,8 @@ class PostsListView(generics.ListAPIView):
 class DaletUpdatePostView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     queryset = AnonimPost.objects.all()
+
+    
+class GrafPowerListView(generics.ListAPIView):
+    serializer_class = GrafPowerSerializer
+    queryset = GrafPower.objects.all()
