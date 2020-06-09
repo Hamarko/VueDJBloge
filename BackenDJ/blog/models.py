@@ -12,10 +12,10 @@ class UserPost(models.Model):
     body = models.CharField(verbose_name='body', max_length=512)
     user = models.ForeignKey(User, verbose_name='body', on_delete=models.CASCADE)
 
-class GrafTimeCoQu(models.Model):
+class GrafPower(models.Model):
     time = models.CharField(verbose_name='time', db_index=True, max_length=64)
-    quotation = models.CharField(verbose_name='quotation', db_index=True, max_length=64)
-    comani = models.CharField(verbose_name='quotation', db_index=True, max_length=64)
+    activPower = models.CharField(verbose_name='activ_power', db_index=True, max_length=64)
+    reactivPower = models.CharField(verbose_name=' reactiv_power', db_index=True, max_length=64)
 
 
 
