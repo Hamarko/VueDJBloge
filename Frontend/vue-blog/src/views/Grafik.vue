@@ -37,23 +37,8 @@ export default {
             color: '#E0E0E3',
             textTransform: 'uppercase'
         }
-    },    
-          xAxis: {
-        gridLineColor: '#707073',
-        labels: {
-            style: {
-                color: '#E0E0E3'
-            }
-        },
-        lineColor: '#707073',
-        minorGridLineColor: '#505053',
-        tickColor: '#707073',
-        title: {
-            style: {
-                color: '#A0A0A3'
-            }
-        }
-    },
+    }, 
+      
         xAxis: {
         gridLineColor: '#707073',
         labels: {
@@ -167,14 +152,23 @@ export default {
         }
     },
         tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> kWt<br/>',
+            formatter: function (tooltip) {
+                switch(point.series.name){
+                    case 'Activ Power':
+                        return tooltip.pointFormat('<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> kWt<br/>')
+                    case 'Reactiv Power':
+                        return tooltip.pointFormat('<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> kW<br/>')
+
+                }
+            },
+            //pointFormat:'<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> kWt<br/>',          
             valueDecimals: 2,
             split: true
         },
-          series: [{
+        series: [{
             data: [],
-            name:''
-
+            name:'',
+            value:''
           }]
         },
         rangeSelector: {
@@ -251,13 +245,11 @@ export default {
         Axios.get('http://127.0.0.1:8000/api/v1/graf/').then((r) => {
             let activPower = [];
             let reactivPowe = [];            
-            for (let i = 0; i < r.data.length; i++) {  
-                console.log(r.data[i])            
+            for (let i = 0; i < r.data.length; i++) {                             
                 activPower.push([Date.parse(r.data[i].time),+r.data[i].activPower]);
-                reactivPowe.push([Date.parse(r.data[i].time),+r.data[i].reactivPower]);
-                
+                reactivPowe.push([Date.parse(r.data[i].time),+r.data[i].reactivPower]);                
             }
-            _this.stockOptions.series = [{name:'Activ Power',data :activPower},{name:'Reactiv Power',data :reactivPowe}]            
+            _this.stockOptions.series = [{name:'Activ Power',data :activPower,value:'kWt'},{name:'Reactiv Power',data :reactivPowe,value:'kW'}]            
         })
       }
     }
