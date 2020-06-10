@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from blog.views import GrafPowerListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),    
@@ -23,4 +24,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/auth/', include('djoser.urls.authtoken')),
     path('api/v1/auth/', include('djoser.urls.jwt')),
+    path('api/v1/graf/', GrafPowerListView.as_view()),
 ]
